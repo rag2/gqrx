@@ -107,6 +107,11 @@ class main_window(QtGui.QMainWindow):
         self.gui.agcCombo.setEnabled(False)  # There is an AGC block but with fixed values
 
         # Connect signals
+        
+        # double click on FFT scope
+        self.connect(snk, QtCore.SIGNAL("plotPointSelected(QPointF)"), 
+                    self.pointSelected)
+        
         # Frequency controls
         self.connect(self.gui.freqUpBut1, QtCore.SIGNAL("clicked()"),
                      self.freqUpBut1Clicked)
@@ -264,6 +269,17 @@ class main_window(QtGui.QMainWindow):
 
 
     # Functions called when signals are triggered in the GUI
+    
+    def pointSelected(self,point):
+        "Double click on FFT scope"
+        freq = point.x()
+        ampl = point.y()
+        
+        print "Freq = ",  freq
+        print "Ampl = ",  ampl
+    
+    
+    
     def pauseFg(self):
         if(self.gui.pauseButton.text() == "Pause"):
             self.fg.stop()
@@ -519,6 +535,11 @@ class my_top_block(gr.top_block):
                                  self._freq, self._sample_rate,
                                  "USRP Display",
                                  True, False, False, False, False)
+                                 
+        self.snk.set_trace_colour(64,192,192)
+        self.snk.set_bg_colour(0,52,103)
+        self.snk.set_use_rf_frequencies(True)
+
       
         # frequency xlating filter used for tuning and decimation
         # to bring usrp rate down to 50 ksps regardless of USRP decimation (250k for FM-W)
