@@ -32,7 +32,7 @@ from datetime import datetime
 import sys
 
 try:
-    from gnuradio.qtgui import qtgui
+    from gnuradio.qtgui2 import qtgui2
     from PyQt4 import QtGui, QtCore
     import sip
 except ImportError:
@@ -515,10 +515,10 @@ class my_top_block(gr.top_block):
         self._audio_rate = options.ar
 
         # Create FFT scope and waterfall sinks
-        self.snk = qtgui.sink_c(self._fftsize, firdes.WIN_BLACKMAN_hARRIS,
-                                self._freq, self._sample_rate,
-                                "USRP Display",
-                                True, False, False, False, False)
+        self.snk = qtgui2.sink_c(self._fftsize, gr.firdes.WIN_BLACKMAN_hARRIS,
+                                 self._freq, self._sample_rate,
+                                 "USRP Display",
+                                 True, False, False, False, False)
       
         # frequency xlating filter used for tuning and decimation
         # to bring usrp rate down to 50 ksps regardless of USRP decimation (250k for FM-W)
