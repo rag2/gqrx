@@ -21,7 +21,7 @@
 #define RECEIVER_H
 
 #include <gr_top_block.h>
-#include <gr_audio_sink.h>
+//#include <gr_audio_sink.h>
 #include <gr_complex_to_xxx.h>
 #include <gr_multiply_const_ff.h>
 #include <gr_multiply_const_cc.h>
@@ -33,6 +33,7 @@
 #include <dsp/rx_demod_fm.h>
 #include <dsp/rx_demod_am.h>
 #include <dsp/rx_fft.h>
+#include <dsp/rx_audio_buffer.h>
 
 
 /*! \defgroup DSP Digital signal processing library based on GNU Radio */
@@ -192,7 +193,8 @@ private:
     rx_demod_fm_sptr          demod_fm;   /*! FM demodulator. */
     rx_demod_am_sptr          demod_am;   /*! AM demodulator. */
     gr_multiply_const_ff_sptr audio_gain; /*! Audio gain block. */
-    audio_sink::sptr          audio_snk;  /*! Audio sink. */
+    //audio_sink::sptr          audio_snk;  /*! Audio sink. */
+    rx_audio_buffer_sptr      audio_buffer;  /*! Audio output buffer. */
 
 protected:
 

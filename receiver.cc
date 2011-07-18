@@ -34,6 +34,7 @@
 #include <dsp/rx_demod_fm.h>
 #include <dsp/rx_demod_am.h>
 #include <dsp/rx_fft.h>
+#include <dsp/rx_audio_buffer.h>
 
 
 
@@ -58,7 +59,8 @@ receiver::receiver(const std::string input_device, const std::string audio_devic
     demod_fm = make_rx_demod_fm(48000.0, 48000.0, 5000.0, 50.0e-6);
     demod_am = make_rx_demod_am(48000.0, 48000.0, true);
     audio_gain = gr_make_multiply_const_ff(0.1);
-    audio_snk = audio_make_sink(d_audio_rate, audio_device, true);
+    //audio_snk = audio_make_sink(d_audio_rate, audio_device, true);
+    audio_buffer = make_rx_audio_buffer();
 
     tb->connect(fcd_src, 0, fft, 0);
     tb->connect(fcd_src, 0, filter, 0);
@@ -68,7 +70,7 @@ receiver::receiver(const std::string input_device, const std::string audio_devic
     tb->connect(bb_gain, 0, agc, 0);
     tb->connect(agc, 0, demod_fm, 0);
     tb->connect(demod_fm, 0, audio_gain, 0);
-    tb->connect(audio_gain, 0, audio_snk, 0);
+    tb->connect(audio_gain, 0, audio_buffer, 0);
 }
 
 receiver::~receiver()
