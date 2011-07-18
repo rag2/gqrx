@@ -21,6 +21,7 @@
 #define RX_AUDIO_BUFFER_H
 
 #include <gr_sync_block.h>
+#include <boost/circular_buffer.hpp>
 
 
 class rx_audio_buffer;
@@ -50,6 +51,9 @@ public:
     virtual int work (int noutput_items,
                       gr_vector_const_void_star &input_items,
                       gr_vector_void_star &output_items);
+
+private:
+    boost::circular_buffer<float> buffer;
 
 };
 

@@ -19,7 +19,7 @@
  */
 #include <dsp/rx_audio_buffer.h>
 #include <gr_io_signature.h>
-
+#include <iostream>
 
 rx_audio_buffer_sptr make_rx_audio_buffer(int buffer_size)
 {
@@ -32,6 +32,8 @@ rx_audio_buffer::rx_audio_buffer(int buffer_size)
         gr_make_io_signature (1, 1, sizeof(float)),
         gr_make_io_signature (0, 0, 0))
 {
+
+    buffer.set_capacity(buffer_size);
 
 }
 
@@ -46,5 +48,15 @@ int rx_audio_buffer::work (int noutput_items,
                            gr_vector_const_void_star &input_items,
                            gr_vector_void_star &output_items)
 {
+    const float *in = (const float *) input_items[0];
+    int i;
+
+
+    for (i = 0; i < noutput_items; i++) {
+        buffer.push_back(in[i]);
+    }
+
+    //std::cout << "Buffer: " << buffer.size() << std::endl;
+
     return noutput_items;
 }
