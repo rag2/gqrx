@@ -59,6 +59,11 @@ MainWindow::MainWindow(QWidget *parent) :
     d_fftData = new std::complex<float>[MAX_FFT_SIZE];
     d_realFftData = new double[MAX_FFT_SIZE];
 
+    /* audio IO */
+    audio_out = new CSoundOut(this);
+    aout_timer = new QTimer(this);
+    connect(aout_timer, SIGNAL(timeout()), this, SLOT(aoutTimeout()));
+
     /* create dock widgets */
     uiDockRxOpt = new DockRxOpt();
     uiDockInput = new DockInput();
@@ -95,6 +100,10 @@ MainWindow::~MainWindow()
 
     fft_timer->stop();
     delete fft_timer;
+
+    aout_timer->stop();
+    delete aout_timer;
+    delete audio_out;
 
     /* clean up the rest */
     delete ui;
@@ -133,9 +142,13 @@ void MainWindow::on_rxStartStopButton_toggled(bool checked)
         /* start receiver */
         rx->start();
 
+        /* start audio */
+        audio_out->Start(0, false, 48000.0, false);
+        aout_timer->start(50);
+
         /* start GUI timers */
-        meter_timer->start(100);
-        fft_timer->start(100);
+        meter_timer->start(101);
+        fft_timer->start(103);
 
         /* update button label */
         ui->rxStartStopButton->setText(tr("Stop"));
@@ -144,6 +157,10 @@ void MainWindow::on_rxStartStopButton_toggled(bool checked)
         /* stop GUI timers */
         meter_timer->stop();
         fft_timer->stop();
+
+        /* stop audio */
+        aout_timer->stop();
+        audio_out->Stop();
 
         /* stop receiver */
         rx->stop();
@@ -431,6 +448,20 @@ void MainWindow::fftTimeout()
 }
 
 
+
+void MainWindow::aoutTimeout()
+{
+    float data[2400];  // 48ksps @ 50 msec = 2400 smaples
+    int i;
+    int num;
+
+    num = rx->get_audio_data(&data[0], 2400, 32000.0);
+
+    //for (i=0; i<2400; i++) {
+    //    data[i] = double(qrand()) * 15000.0 / RAND_MAX;
+    //}
+    audio_out->PutOutQueue(num, &data[0]);
+}
 
 
 /*! \brief Action: About Qthid

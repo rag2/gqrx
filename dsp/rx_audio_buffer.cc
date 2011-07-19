@@ -51,6 +51,7 @@ int rx_audio_buffer::work (int noutput_items,
     const float *in = (const float *) input_items[0];
     int i;
 
+    boost::mutex::scoped_lock lock(d_mutex);
 
     for (i = 0; i < noutput_items; i++) {
         buffer.push_back(in[i]);
@@ -59,4 +60,34 @@ int rx_audio_buffer::work (int noutput_items,
     //std::cout << "Buffer: " << buffer.size() << std::endl;
 
     return noutput_items;
+}
+
+
+/*! \brief Get audio data from the buffer.
+ *  \param data The data buffer.
+ *  \param num The The desired number of samples.
+ *  \param scale Numer used to scale the data.
+ *  \return The actual number of samples copied into data
+ *
+ */
+int rx_audio_buffer::get_data(float *data, int num, float scale)
+{
+    int len;
+    int i;
+
+    boost::mutex::scoped_lock lock(d_mutex);
+
+    if (num > buffer.size()) {
+        len = buffer.size();
+    }
+    else {
+        len = num;
+    }
+
+    for (i = 0; i < len; i++) {
+        data[i] = buffer[0] * scale;
+        buffer.pop_front();
+    }
+
+    return len;
 }

@@ -153,6 +153,8 @@ public:
 
     void get_fft_data(std::complex<float>* fftPoints, int &fftsize);
 
+    int get_audio_data(float *data, int num, float scale);
+
     /* Squelch parameter */
     status set_sql_level(double level_db);
     status set_sql_alpha(double alpha);

@@ -25,6 +25,8 @@
 #include "qtgui/dockrxopt.h"
 #include "qtgui/dockinput.h"
 
+#include "soundout.h"
+
 #include <receiver.h>
 
 
@@ -54,8 +56,11 @@ private:
     DockRxOpt      *uiDockRxOpt;
     DockInput      *uiDockInput;
 
-    QTimer   *meter_timer;
-    QTimer   *fft_timer;
+    CSoundOut *audio_out;
+
+    QTimer   *meter_timer;   /*! Signal strength meter timer. */
+    QTimer   *fft_timer;     /*! FFT plot timer. */
+    QTimer   *aout_timer;    /*! Audio output timer. */
     receiver *rx;
 
 private slots:
@@ -81,6 +86,7 @@ private slots:
     /* cyclic processing */
     void meterTimeout();
     void fftTimeout();
+    void aoutTimeout();
 
 };
 

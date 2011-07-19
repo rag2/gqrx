@@ -208,6 +208,12 @@ void receiver::get_fft_data(std::complex<float>* fftPoints, int &fftsize)
 }
 
 
+/*! \brief Get audio samples from audio buffer. */
+int receiver::get_audio_data(float *data, int num, float scale)
+{
+    return audio_buffer->get_data(data, num, scale);
+}
+
 
 /*! \brief Set squelch level.
  *  \param level_db The new level in dBFS.

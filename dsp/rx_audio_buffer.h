@@ -22,13 +22,15 @@
 
 #include <gr_sync_block.h>
 #include <boost/circular_buffer.hpp>
+#include <boost/thread/mutex.hpp>
+
 
 
 class rx_audio_buffer;
 
 typedef boost::shared_ptr<rx_audio_buffer> rx_audio_buffer_sptr;
 
-rx_audio_buffer_sptr make_rx_audio_buffer (int buffer_size=4096);
+rx_audio_buffer_sptr make_rx_audio_buffer (int buffer_size=20480);
 
 
 /*! \brief Audio output buffer
@@ -52,8 +54,11 @@ public:
                       gr_vector_const_void_star &input_items,
                       gr_vector_void_star &output_items);
 
+    int get_data(float *data, int num, float scale=1.0);
+
 private:
     boost::circular_buffer<float> buffer;
+    boost::mutex d_mutex;  /*! Used to lock audio buffer. */
 
 };
 
