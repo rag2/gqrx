@@ -86,8 +86,13 @@ Bpsk1000Win::Bpsk1000Win(QWidget *parent) :
 
     /* start demodulator and connect callbacks */
     QStringList params;
-    params << "-c 2000"      // carrier search center
-           << "-r 1400"      // carrier search range
+    // wide SSB filter; needs some Doppler correction a few times during the pass
+    //params << "-c 2000"      // carrier search center
+    //       << "-r 800"      // carrier search range
+    //      << "-v";          // verbose (debug output)
+    // wide filter and no Doppler correction (should track whole pass)
+    params << "-c 4000"      // carrier search center
+           << "-r 3000"      // carrier search range
            << "-v";          // verbose (debug output)
 
     demod = new QProcess(this);
