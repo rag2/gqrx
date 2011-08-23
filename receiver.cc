@@ -85,8 +85,9 @@ receiver::receiver(const std::string input_device, const std::string audio_devic
     tb->connect(filter, 0, meter, 0);
     tb->connect(filter, 0, sql, 0);
     tb->connect(sql, 0, bb_gain, 0);
-    tb->connect(bb_gain, 0, agc, 0);
-    tb->connect(agc, 0, demod_fm, 0);
+    //tb->connect(bb_gain, 0, agc, 0);
+    //tb->connect(agc, 0, demod_fm, 0);
+    tb->connect(bb_gain, 0, demod_fm, 0);
     tb->connect(demod_fm, 0, audio_rr, 0);
     tb->connect(audio_rr, 0, audio_gain, 0);
     tb->connect(audio_gain, 0, audio_snk, 0);
@@ -370,17 +371,17 @@ receiver::status receiver::set_demod(demod rx_demod)
     switch (current_demod) {
 
     case DEMOD_SSB:
-        tb->disconnect(agc, 0, demod_ssb, 0);
+        tb->disconnect(bb_gain, 0, demod_ssb, 0);
         tb->disconnect(demod_ssb, 0, audio_rr, 0);
         break;
 
     case DEMOD_AM:
-        tb->disconnect(agc, 0, demod_am, 0);
+        tb->disconnect(bb_gain, 0, demod_am, 0);
         tb->disconnect(demod_am, 0, audio_rr, 0);
         break;
 
     case DEMOD_FM:
-        tb->disconnect(agc, 0, demod_fm, 0);
+        tb->disconnect(bb_gain, 0, demod_fm, 0);
         tb->disconnect(demod_fm, 0, audio_rr, 0);
         break;
 
@@ -392,26 +393,26 @@ receiver::status receiver::set_demod(demod rx_demod)
 
     case DEMOD_SSB:
         d_demod = rx_demod;
-        tb->connect(agc, 0, demod_ssb, 0);
+        tb->connect(bb_gain, 0, demod_ssb, 0);
         tb->connect(demod_ssb, 0, audio_rr, 0);
         break;
 
     case DEMOD_AM:
         d_demod = rx_demod;
-        tb->connect(agc, 0, demod_am, 0);
+        tb->connect(bb_gain, 0, demod_am, 0);
         tb->connect(demod_am, 0, audio_rr, 0);
         break;
 
     case DEMOD_FM:
         d_demod = DEMOD_FM;
-        tb->connect(agc, 0, demod_fm, 0);
+        tb->connect(bb_gain, 0, demod_fm, 0);
         tb->connect(demod_fm, 0, audio_rr, 0);
         break;
 
     default:
         /* use FMN */
         d_demod = DEMOD_FM;
-        tb->connect(agc, 0, demod_fm, 0);
+        tb->connect(bb_gain, 0, demod_fm, 0);
         tb->connect(demod_fm, 0, audio_rr, 0);
         break;
     }
