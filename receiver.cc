@@ -34,7 +34,7 @@
 #include <dsp/rx_demod_am.h>
 #include <dsp/rx_fft.h>
 #include <dsp/rx_agc_xx.h>
-
+#include <pulseaudio/pa_sink.h>
 
 
 /*! \brief Public contructor.
@@ -71,7 +71,7 @@ receiver::receiver(const std::string input_device, const std::string audio_devic
     demod_am = make_rx_demod_am(d_bandwidth, d_bandwidth, true);
     audio_rr = make_resampler_ff(d_bandwidth, d_audio_rate);
     audio_gain = gr_make_multiply_const_ff(0.1);
-    audio_snk = audio_make_sink(d_audio_rate, audio_device, true);
+    audio_out = make_pa_sink(d_audio_rate, "GQRX", "Output");
     wav_sink = gr_make_wavfile_sink("/tmp/gqrx.wav", 1, 48000, 16);
     /* wav source is created when playback is started (wav_src does not have set_filename) */
     audio_null_sink = gr_make_null_sink(sizeof(float));
@@ -88,7 +88,7 @@ receiver::receiver(const std::string input_device, const std::string audio_devic
     tb->connect(agc, 0, demod_fm, 0);
     tb->connect(demod_fm, 0, audio_rr, 0);
     tb->connect(audio_rr, 0, audio_gain, 0);
-    tb->connect(audio_gain, 0, audio_snk, 0);
+    tb->connect(audio_gain, 0, audio_out, 0);
     tb->connect(audio_gain, 0, wav_sink, 0);
 
     /* close wav file; this will disable writing */
@@ -138,10 +138,11 @@ void receiver::set_output_device(const std::string device)
 {
     tb->lock();
 
-    tb->disconnect(audio_gain, 0, audio_snk, 0);
-    audio_snk.reset();
-    audio_snk = audio_make_sink(d_audio_rate, device, true);
-    tb->connect(audio_gain, 0, audio_snk, 0);
+    /** FIXME **/
+    //tb->disconnect(audio_gain, 0, audio_snk, 0);
+    //audio_snk.reset();
+    //audio_snk = audio_make_sink(d_audio_rate, device, true);
+    //tb->connect(audio_gain, 0, audio_snk, 0);
 
     tb->unlock();
 }

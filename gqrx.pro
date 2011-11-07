@@ -97,6 +97,13 @@ HEADERS  += mainwindow.h \
     dsp/rx_agc_xx.h \
     dsp/agc_impl.h
 
+
+linux-g++ {
+    SOURCES += pulseaudio/pa_sink.cc
+    HEADERS += pulseaudio/pa_sink.h
+}
+
+
 FORMS    += \
     qtgui/dockrxopt.ui \
     mainwindow.ui \
@@ -114,7 +121,7 @@ FORMS    += \
 # FIXME: check for version?
 linux-g++ {
     CONFIG += link_pkgconfig
-    PKGCONFIG += gnuradio-core gnuradio-audio gnuradio-fcd
+    PKGCONFIG += gnuradio-core gnuradio-audio gnuradio-fcd libpulse-simple
 }
 
 macx-g++ {
