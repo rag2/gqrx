@@ -53,7 +53,7 @@ MainWindow::MainWindow(QWidget *parent) :
     QSettings settings;
     QString indev = settings.value("input").toString();
     QString outdev = settings.value("output").toString();
-    rx = new receiver(indev.toStdString(), outdev.toStdString());
+    rx = new receiver(indev.toStdString(), "" /** FIXME: outdev.toStdString() **/);
 
     rx->set_rf_freq(144500000.0f);
 

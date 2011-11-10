@@ -71,7 +71,7 @@ receiver::receiver(const std::string input_device, const std::string audio_devic
     demod_am = make_rx_demod_am(d_bandwidth, d_bandwidth, true);
     audio_rr = make_resampler_ff(d_bandwidth, d_audio_rate);
     audio_gain = gr_make_multiply_const_ff(0.1);
-    audio_out = make_pa_sink(d_audio_rate, "GQRX", "Output");
+    audio_out = make_pa_sink(audio_device, d_audio_rate, "GQRX", "Output");
     wav_sink = gr_make_wavfile_sink("/tmp/gqrx.wav", 1, 48000, 16);
     /* wav source is created when playback is started (wav_src does not have set_filename) */
     audio_null_sink = gr_make_null_sink(sizeof(float));

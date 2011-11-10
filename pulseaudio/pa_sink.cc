@@ -29,19 +29,22 @@
 
 
 /*! \brief Create a new pulseaudio sink object.
+ *  \param device_name The name of the audio device, or NULL for default.
  *  \param audio_rate The sample rate of the audio stream.
- *  \param app_name Applciation name.
+ *  \param app_name Application name.
  *  \param stream_name The audio stream name.
  *
  * This is effectively the public constructor for pa_sink.
  */
-pa_sink_sptr make_pa_sink(int audio_rate, const std::string app_name, const std::string stream_name)
+pa_sink_sptr make_pa_sink(const std::string device_name, int audio_rate,
+                          const std::string app_name, const std::string stream_name)
 {
-    return gnuradio::get_initial_sptr(new pa_sink(audio_rate, app_name, stream_name));
+    return gnuradio::get_initial_sptr(new pa_sink(device_name, audio_rate, app_name, stream_name));
 }
 
 
-pa_sink::pa_sink(int audio_rate, const std::string app_name, const std::string stream_name)
+pa_sink::pa_sink(const std::string device_name, int audio_rate,
+                 const std::string app_name, const std::string stream_name)
   : gr_sync_block ("pa_sink",
         gr_make_io_signature (1, 1, sizeof(float)),
         gr_make_io_signature (0, 0, 0))
@@ -57,7 +60,7 @@ pa_sink::pa_sink(int audio_rate, const std::string app_name, const std::string s
     d_pasink = pa_simple_new(NULL,
                              app_name.c_str(),
                              PA_STREAM_PLAYBACK,
-                             NULL,
+                             device_name.empty() ? NULL : device_name.c_str(),
                              stream_name.c_str(),
                              &ss,
                              NULL,
@@ -65,6 +68,7 @@ pa_sink::pa_sink(int audio_rate, const std::string app_name, const std::string s
                              &error);
 
     if (!d_pasink) {
+        /** FIXME: Throw an exception **/
         fprintf(stderr, __FILE__": pa_simple_new() failed: %s\n", pa_strerror(error));
     }
 
