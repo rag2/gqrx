@@ -35,13 +35,13 @@
  *
  * This is effectively the public constructor for pa_sink.
  */
-pa_sink_sptr make_pa_sink(int audio_rate, const char *app_name, const char *stream_name)
+pa_sink_sptr make_pa_sink(int audio_rate, const std::string app_name, const std::string stream_name)
 {
     return gnuradio::get_initial_sptr(new pa_sink(audio_rate, app_name, stream_name));
 }
 
 
-pa_sink::pa_sink(int audio_rate, const char *app_name, const char *stream_name)
+pa_sink::pa_sink(int audio_rate, const std::string app_name, const std::string stream_name)
   : gr_sync_block ("pa_sink",
         gr_make_io_signature (1, 1, sizeof(float)),
         gr_make_io_signature (0, 0, 0))
@@ -55,10 +55,10 @@ pa_sink::pa_sink(int audio_rate, const char *app_name, const char *stream_name)
     ss.channels = 1;
 
     d_pasink = pa_simple_new(NULL,
-                             app_name,
+                             app_name.c_str(),
                              PA_STREAM_PLAYBACK,
                              NULL,
-                             stream_name,
+                             stream_name.c_str(),
                              &ss,
                              NULL,
                              NULL,
