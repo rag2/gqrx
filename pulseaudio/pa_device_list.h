@@ -58,6 +58,9 @@ public:
     PaDeviceList();
     ~PaDeviceList();
 
+    vector<PaDevice> get_input_devices() { return d_sources; }
+    vector<PaDevice> get_output_devices() {return d_sinks; }
+
 private:
     vector<PaDevice> d_sources;   /*! List of pulseaudio sources. */
     vector<PaDevice> d_sinks;  /*! List of pulseaudio sinks. */
