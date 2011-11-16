@@ -60,7 +60,8 @@ SOURCES +=\
     dsp/rx_source_base.cc \
     dsp/rx_source_fcd.cc \
     dsp/rx_agc_xx.cc \
-    dsp/agc_impl.cpp
+    dsp/agc_impl.cpp \
+    pulseaudio/pa_device_list.cc
 
 
 HEADERS  += mainwindow.h \
@@ -95,7 +96,8 @@ HEADERS  += mainwindow.h \
     dsp/rx_source_base.h \
     dsp/rx_source_fcd.h \
     dsp/rx_agc_xx.h \
-    dsp/agc_impl.h
+    dsp/agc_impl.h \
+    pulseaudio/pa_device_list.h
 
 
 linux-g++ {
@@ -121,7 +123,7 @@ FORMS    += \
 # FIXME: check for version?
 unix {
     CONFIG += link_pkgconfig
-    PKGCONFIG += gnuradio-core gnuradio-audio gnuradio-fcd libpulse-simple
+    PKGCONFIG += gnuradio-core gnuradio-audio gnuradio-fcd libpulse-simple libpulse
 }
 
 macx-g++ {
