@@ -56,9 +56,13 @@ public:
               gr_vector_const_void_star &input_items,
               gr_vector_void_star &output_items);
 
+    void select_device(std::string device_name);
 
 private:
-    pa_simple *d_pasink;  /*! The pulseaudio object. */
+    pa_simple *d_pasink;        /*! The pulseaudio object. */
+    std::string d_stream_name;  /*! Descriptive name of the stream. */
+    std::string d_app_name;     /*! Descriptive name of the applcation. */
+    pa_sample_spec d_ss;        /*! pulseaudio sample specification. */
 
 };
 

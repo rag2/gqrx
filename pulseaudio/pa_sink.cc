@@ -47,22 +47,24 @@ pa_sink::pa_sink(const std::string device_name, int audio_rate,
                  const std::string app_name, const std::string stream_name)
   : gr_sync_block ("pa_sink",
         gr_make_io_signature (1, 1, sizeof(float)),
-        gr_make_io_signature (0, 0, 0))
+        gr_make_io_signature (0, 0, 0)),
+    d_app_name(app_name),
+    d_stream_name(stream_name)
 {
     int error;
 
     /* The sample type to use */
     pa_sample_spec ss;
-    ss.format = PA_SAMPLE_FLOAT32LE;
-    ss.rate = audio_rate;
-    ss.channels = 1;
+    d_ss.format = PA_SAMPLE_FLOAT32LE;
+    d_ss.rate = audio_rate;
+    d_ss.channels = 1;
 
     d_pasink = pa_simple_new(NULL,
-                             app_name.c_str(),
+                             d_app_name.c_str(),
                              PA_STREAM_PLAYBACK,
                              device_name.empty() ? NULL : device_name.c_str(),
-                             stream_name.c_str(),
-                             &ss,
+                             d_stream_name.c_str(),
+                             &d_ss,
                              NULL,
                              NULL,
                              &error);
@@ -79,6 +81,32 @@ pa_sink::~pa_sink()
 {
     if (d_pasink) {
         pa_simple_free(d_pasink);
+    }
+}
+
+
+/*! \brief Select a new pulseaudio output device.
+ *  \param device_name The name of the new output.
+ */
+void pa_sink::select_device(std::string device_name)
+{
+    int error;
+
+    pa_simple_free(d_pasink);
+
+    d_pasink = pa_simple_new(NULL,
+                             d_app_name.c_str(),
+                             PA_STREAM_PLAYBACK,
+                             device_name.empty() ? NULL : device_name.c_str(),
+                             d_stream_name.c_str(),
+                             &d_ss,
+                             NULL,
+                             NULL,
+                             &error);
+
+    if (!d_pasink) {
+        /** FIXME: Throw an exception **/
+        fprintf(stderr, __FILE__": pa_simple_new() failed: %s\n", pa_strerror(error));
     }
 }
 
