@@ -19,22 +19,22 @@
  */
 #include "pa_device_list.h"
 
-PaDevice::PaDevice(unsigned int idx, string name, string desc) :
+pa_device::pa_device(unsigned int idx, string name, string desc) :
     d_index(idx), d_name(name), d_description(desc)
 {
 }
 
-PaDevice::~PaDevice()
+pa_device::~pa_device()
 {
 }
 
 
-PaDeviceList::PaDeviceList()
+pa_device_list::pa_device_list()
 {
     populate_device_list();
 }
 
-PaDeviceList::~PaDeviceList()
+pa_device_list::~pa_device_list()
 {
     d_sources.clear();
     d_sinks.clear();
@@ -46,7 +46,7 @@ PaDeviceList::~PaDeviceList()
   * and stores them for later retrieval using getInputDevices() and
   * getOutputDevices().
   */
-int PaDeviceList::populate_device_list()
+int pa_device_list::populate_device_list()
 {
     pa_mainloop *pa_ml;
     pa_mainloop_api *pa_mlapi;
@@ -150,7 +150,7 @@ int PaDeviceList::populate_device_list()
  * This callback gets called when our context changes state.  We really only
  * care about when it's ready or if it has failed.
  */
-void PaDeviceList::pa_state_cb(pa_context *c, void *userdata)
+void pa_device_list::pa_state_cb(pa_context *c, void *userdata)
 {
     pa_context_state_t state;
     int *pa_ready = (int *)userdata;
@@ -186,16 +186,16 @@ void PaDeviceList::pa_state_cb(pa_context *c, void *userdata)
  * a C-callback function. For the same reason, a pointer to "this" is passed in
  * the usedata parameter, otherwise we wouldn't be able to access non-static members.
  */
-void PaDeviceList::pa_sinklist_cb(pa_context *ctx, const pa_sink_info *info, int eol, void *userdata)
+void pa_device_list::pa_sinklist_cb(pa_context *ctx, const pa_sink_info *info, int eol, void *userdata)
 {
-    PaDeviceList *pdl = reinterpret_cast<PaDeviceList *>(userdata);
+    pa_device_list *pdl = reinterpret_cast<pa_device_list *>(userdata);
 
     // exit if we have reached the end of the list
     if (eol > 0) {
         return;
     }
 
-    pdl->d_sinks.push_back(PaDevice(info->index, info->name, info->description));
+    pdl->d_sinks.push_back(pa_device(info->index, info->name, info->description));
 }
 
 
@@ -210,14 +210,14 @@ void PaDeviceList::pa_sinklist_cb(pa_context *ctx, const pa_sink_info *info, int
  * a C-callback function. For the same reason, a pointer to "this" is passed in
  * the usedata parameter, otherwise we wouldn't be able to access non-static members.
  */
-void PaDeviceList::pa_sourcelist_cb(pa_context *ctx, const pa_source_info *info, int eol, void *userdata)
+void pa_device_list::pa_sourcelist_cb(pa_context *ctx, const pa_source_info *info, int eol, void *userdata)
 {
-    PaDeviceList *pdl = reinterpret_cast<PaDeviceList *>(userdata);
+    pa_device_list *pdl = reinterpret_cast<pa_device_list *>(userdata);
 
     // exit if we have reached the end of the list
     if (eol > 0) {
         return;
     }
 
-    pdl->d_sources.push_back(PaDevice(info->index, info->name, info->description));
+    pdl->d_sources.push_back(pa_device(info->index, info->name, info->description));
 }

@@ -30,11 +30,11 @@ using namespace std;
  * This class represents a pulseaudio device. The device can be either source
  * or sink, this class does not differentiate between them.
  */
-class PaDevice
+class pa_device
 {
 public:
-    PaDevice(unsigned int idx=0, string name="", string desc="");
-    ~PaDevice();
+    pa_device(unsigned int idx=0, string name="", string desc="");
+    ~pa_device();
 
     void set_index(unsigned int idx) { d_index = idx; }
     void set_name(string name) { d_name = name; }
@@ -52,18 +52,18 @@ private:
 
 
 /*! \brief Class for storing and retrieving a list of pulseaudio sinks and sources. */
-class PaDeviceList
+class pa_device_list
 {
 public:
-    PaDeviceList();
-    ~PaDeviceList();
+    pa_device_list();
+    ~pa_device_list();
 
-    vector<PaDevice> get_input_devices() { return d_sources; }
-    vector<PaDevice> get_output_devices() {return d_sinks; }
+    vector<pa_device> get_input_devices() { return d_sources; }
+    vector<pa_device> get_output_devices() {return d_sinks; }
 
 private:
-    vector<PaDevice> d_sources;   /*! List of pulseaudio sources. */
-    vector<PaDevice> d_sinks;  /*! List of pulseaudio sinks. */
+    vector<pa_device> d_sources;   /*! List of pulseaudio sources. */
+    vector<pa_device> d_sinks;  /*! List of pulseaudio sinks. */
 
     int populate_device_list();
 
