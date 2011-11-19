@@ -20,48 +20,47 @@
 #ifndef PA_SINK_H
 #define PA_SINK_H
 
+#include <string>
 #include <gr_sync_block.h>
 #include <pulse/simple.h>
 
+using namespace std;
 
 class pa_sink;
 
 typedef boost::shared_ptr<pa_sink> pa_sink_sptr;
 
-pa_sink_sptr make_pa_sink(const std::string device_name, int audio_rate,
-                          const std::string app_name="GNU Radio",
-                          const std::string stream_name="SDR");
+pa_sink_sptr make_pa_sink(const string device_name, int audio_rate,
+                          const string app_name="GNU Radio",
+                          const string stream_name="SDR");
 
 
 /*! \brief Pulseaudio sink
  *  \ingroup IO
  *
  * This block implements a one channel pulseaudio sink using the Pulseaudio simple API.
- * Note that unlike most other audio backends, this block does not provide the option
- * to select output device because according to pulseaudio philosophy that should be left
- * entirely to the user. (FIXME: How about server?)
  *
  */
 class pa_sink : public gr_sync_block
 {
-    friend pa_sink_sptr make_pa_sink(const std::string device_name, int audio_rate,
-                                     const std::string app_name, const std::string stream_name);
+    friend pa_sink_sptr make_pa_sink(const string device_name, int audio_rate,
+                                     const string app_name, const string stream_name);
 
 public:
-    pa_sink(const std::string device_name, int audio_rate,
-            const std::string app_name="GNU Radio", const std::string stream_name="SDR");
+    pa_sink(const string device_name, int audio_rate,
+            const string app_name="GNU Radio", const string stream_name="SDR");
     ~pa_sink();
 
     int work (int noutput_items,
               gr_vector_const_void_star &input_items,
               gr_vector_void_star &output_items);
 
-    void select_device(std::string device_name);
+    void select_device(string device_name);
 
 private:
     pa_simple *d_pasink;        /*! The pulseaudio object. */
-    std::string d_stream_name;  /*! Descriptive name of the stream. */
-    std::string d_app_name;     /*! Descriptive name of the applcation. */
+    string d_stream_name;  /*! Descriptive name of the stream. */
+    string d_app_name;     /*! Descriptive name of the applcation. */
     pa_sample_spec d_ss;        /*! pulseaudio sample specification. */
 
 };

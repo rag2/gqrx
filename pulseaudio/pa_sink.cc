@@ -36,15 +36,15 @@
  *
  * This is effectively the public constructor for pa_sink.
  */
-pa_sink_sptr make_pa_sink(const std::string device_name, int audio_rate,
-                          const std::string app_name, const std::string stream_name)
+pa_sink_sptr make_pa_sink(const string device_name, int audio_rate,
+                          const string app_name, const string stream_name)
 {
     return gnuradio::get_initial_sptr(new pa_sink(device_name, audio_rate, app_name, stream_name));
 }
 
 
-pa_sink::pa_sink(const std::string device_name, int audio_rate,
-                 const std::string app_name, const std::string stream_name)
+pa_sink::pa_sink(const string device_name, int audio_rate,
+                 const string app_name, const string stream_name)
   : gr_sync_block ("pa_sink",
         gr_make_io_signature (1, 1, sizeof(float)),
         gr_make_io_signature (0, 0, 0)),
@@ -88,7 +88,7 @@ pa_sink::~pa_sink()
 /*! \brief Select a new pulseaudio output device.
  *  \param device_name The name of the new output.
  */
-void pa_sink::select_device(std::string device_name)
+void pa_sink::select_device(string device_name)
 {
     int error;
 
