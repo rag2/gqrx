@@ -40,6 +40,9 @@
 #include <dsp/resampler_ff.h>
 #include <dsp/sniffer_f.h>
 #include <pulseaudio/pa_sink.h>
+#include <pulseaudio/pa_source.h>
+
+#include <gr_float_to_complex.h>
 
 
 /*! \defgroup DSP Digital signal processing library based on GNU Radio */
@@ -163,9 +166,12 @@ private:
 
     gr_top_block_sptr         tb;        /*! The GNU Radio top block. */
 
-    //fcd_source_c_sptr         fcd_src;   /*! Funcube Dongle source. */
-    //rx_source_base           *src;
-    rx_source_base_sptr       src;
+    //fcd_source_c_sptr         fcd_src;  DELETE  /*! Funcube Dongle source. */
+    //rx_source_base           *src;  DELETE
+    ///rx_source_base_sptr       src;
+    gr_float_to_complex_sptr   src;
+    pa_source_sptr ain;
+
 
     rx_fft_c_sptr             fft;       /*! Receiver FFT block. */
     rx_filter_sptr            filter;

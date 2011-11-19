@@ -35,6 +35,7 @@
 #include <dsp/rx_fft.h>
 #include <dsp/rx_agc_xx.h>
 #include <pulseaudio/pa_sink.h>
+#include <pulseaudio/pa_source.h>
 
 
 /*! \brief Public contructor.
@@ -54,8 +55,17 @@ receiver::receiver(const std::string input_device, const std::string audio_devic
 {
     tb = gr_make_top_block("gqrx");
 
-    src = make_rx_source_fcd(input_device);
-    src->set_freq(d_rf_freq);
+    //src = make_rx_source_fcd(input_device);
+    //src->set_freq(d_rf_freq);
+
+    ain = make_pa_source("alsa_input.usb-Hanlincrest_Ltd._FUNcube_Dongle_V1.0-00-default.analog-stereo",
+                         96000, 2, "GQRX", "input");
+
+    src = gr_make_float_to_complex(1);
+
+    tb->connect(ain, 0, src, 0);
+    tb->connect(ain, 1, src, 1);
+
 
     fft = make_rx_fft_c(4096, 0, false);
 
@@ -129,7 +139,7 @@ void receiver::stop()
  */
 void receiver::set_input_device(const std::string device)
 {
-    src->select_device(device);
+    ///src->select_device(device);
 }
 
 
@@ -158,7 +168,7 @@ receiver::status receiver::set_rf_freq(float freq_hz)
 {
     d_rf_freq = freq_hz;
 
-    src->set_freq(d_rf_freq);
+    ///src->set_freq(d_rf_freq);
     // FIXME: read back frequency?
 
     return STATUS_OK;
@@ -170,7 +180,7 @@ receiver::status receiver::set_rf_freq(float freq_hz)
  */
 float receiver::get_rf_freq()
 {
-    d_rf_freq = src->get_freq();
+    ///d_rf_freq = src->get_freq();
     return d_rf_freq;
 }
 
@@ -180,7 +190,7 @@ float receiver::get_rf_freq()
  */
 receiver::status receiver::set_rf_gain(float gain_db)
 {
-    src->set_gain(gain_db);
+    ///src->set_gain(gain_db);
     return STATUS_OK;
 }
 
@@ -265,14 +275,14 @@ receiver::status receiver::set_filter_shape(filter_shape shape)
 
 receiver::status receiver::set_dc_corr(double dci, double dcq)
 {
-    src->set_dc_corr(dci, dcq);
+    ///src->set_dc_corr(dci, dcq);
 
     return STATUS_OK;
 }
 
 receiver::status receiver::set_iq_corr(double gain, double phase)
 {
-    src->set_iq_corr(gain, phase);
+    ///src->set_iq_corr(gain, phase);
 
     return STATUS_OK;
 }
