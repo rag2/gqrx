@@ -21,6 +21,8 @@
 #define IOCONFIG_H
 
 #include <QDialog>
+#include "pulseaudio/pa_device_list.h"
+
 
 namespace Ui {
     class CIoConfig;
@@ -41,6 +43,7 @@ private slots:
 
 private:
     Ui::CIoConfig *ui;
+    pa_device_list *devlist;
 };
 
 #endif // IOCONFIG_H

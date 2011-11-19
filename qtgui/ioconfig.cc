@@ -20,9 +20,11 @@
 #include <QtGlobal>
 #include <QSettings>
 #include <QDebug>
+#include "pulseaudio/pa_device_list.h"
 #include "qtgui/ioconfig.h"
 #include "ui_ioconfig.h"
 
+#include <iostream>
 
 
 CIoConfig::CIoConfig(QWidget *parent) :
@@ -47,11 +49,22 @@ CIoConfig::CIoConfig(QWidget *parent) :
     ui->inDevEdit->setText(indev);
     ui->outDevEdit->setText(outdev);
 
+    // populate I/O device selectors
+    devlist = new pa_device_list();
+
+    // output devices
+    vector<pa_device> outputs = devlist->get_output_devices();
+    for (int i = 0; i < outputs.size(); i++) {
+        std::cout << "Output " << i << " is " << outputs[i].get_description() << std::endl;
+        ui->outDevSelector->addItem(QString::fromStdString(outputs[i].get_description()));
+    }
+
 }
 
 CIoConfig::~CIoConfig()
 {
     delete ui;
+    delete devlist;
 }
 
 

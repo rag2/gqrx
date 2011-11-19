@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>354</width>
-    <height>182</height>
+    <width>306</width>
+    <height>292</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -20,28 +20,118 @@
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
     <layout class="QFormLayout" name="formLayout">
+     <property name="fieldGrowthPolicy">
+      <enum>QFormLayout::AllNonFixedFieldsGrow</enum>
+     </property>
      <property name="margin">
       <number>20</number>
      </property>
-     <item row="0" column="0">
-      <widget class="QLabel" name="inDevLabel">
-       <property name="text">
-        <string>Input device:</string>
-       </property>
-      </widget>
-     </item>
      <item row="0" column="1">
       <widget class="QLineEdit" name="inDevEdit"/>
      </item>
-     <item row="1" column="0">
-      <widget class="QLabel" name="outDevLabel">
-       <property name="text">
-        <string>Output device:</string>
+     <item row="1" column="1">
+      <widget class="QLineEdit" name="outDevEdit"/>
+     </item>
+     <item row="5" column="0" colspan="2">
+      <widget class="Line" name="line">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
        </property>
       </widget>
      </item>
-     <item row="1" column="1">
-      <widget class="QLineEdit" name="outDevEdit"/>
+     <item row="6" column="0">
+      <widget class="QLabel" name="outDevLabel">
+       <property name="text">
+        <string>Output device</string>
+       </property>
+      </widget>
+     </item>
+     <item row="6" column="1">
+      <widget class="QComboBox" name="outDevSelector">
+       <property name="toolTip">
+        <string>Select the audio output device</string>
+       </property>
+       <property name="sizeAdjustPolicy">
+        <enum>QComboBox::AdjustToMinimumContentsLengthWithIcon</enum>
+       </property>
+       <item>
+        <property name="text">
+         <string>Default</string>
+        </property>
+       </item>
+      </widget>
+     </item>
+     <item row="2" column="1">
+      <widget class="QComboBox" name="inTypeSelector">
+       <property name="toolTip">
+        <string>Select input device type</string>
+       </property>
+       <item>
+        <property name="text">
+         <string>Funcube Dongle</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>USRP</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Soundcard</string>
+        </property>
+       </item>
+      </widget>
+     </item>
+     <item row="3" column="0">
+      <widget class="QLabel" name="inDevLabel">
+       <property name="text">
+        <string>Input device</string>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="0">
+      <widget class="QLabel" name="inTypeLabel">
+       <property name="text">
+        <string>Input type</string>
+       </property>
+      </widget>
+     </item>
+     <item row="3" column="1">
+      <widget class="QComboBox" name="inDevSelector">
+       <property name="toolTip">
+        <string>Select an input device</string>
+       </property>
+      </widget>
+     </item>
+     <item row="4" column="1">
+      <widget class="QDoubleSpinBox" name="lnbSpinBox">
+       <property name="toolTip">
+        <string>LO frequency for LNB (use negative value for upconverters)</string>
+       </property>
+       <property name="frame">
+        <bool>true</bool>
+       </property>
+       <property name="suffix">
+        <string> GHz</string>
+       </property>
+       <property name="decimals">
+        <number>6</number>
+       </property>
+       <property name="minimum">
+        <double>-24.000000000000000</double>
+       </property>
+       <property name="maximum">
+        <double>24.000000000000000</double>
+       </property>
+      </widget>
+     </item>
+     <item row="4" column="0">
+      <widget class="QLabel" name="label">
+       <property name="text">
+        <string>LNB LO</string>
+       </property>
+      </widget>
      </item>
     </layout>
    </item>
