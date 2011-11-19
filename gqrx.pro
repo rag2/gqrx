@@ -61,7 +61,8 @@ SOURCES +=\
     dsp/rx_source_fcd.cc \
     dsp/rx_agc_xx.cc \
     dsp/agc_impl.cpp \
-    pulseaudio/pa_device_list.cc
+    pulseaudio/pa_device_list.cc \
+    pulseaudio/pa_source.cc
 
 
 HEADERS  += mainwindow.h \
@@ -97,7 +98,8 @@ HEADERS  += mainwindow.h \
     dsp/rx_source_fcd.h \
     dsp/rx_agc_xx.h \
     dsp/agc_impl.h \
-    pulseaudio/pa_device_list.h
+    pulseaudio/pa_device_list.h \
+    pulseaudio/pa_source.h
 
 
 linux-g++ {
